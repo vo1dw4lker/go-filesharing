@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>File Details</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/file-view-styles.css">
+</head>
+<body>
+    <div class="container">
+
+        <main>
+            <section class="upload-section">
+                <div class="file-details">
+                    <h1>File Details</h1>
+                    <p>File Name: {{ .FileName }}</p>
+                    <p>File Size: {{ .FileSize }}</p>
+                    <p>Expiration Date: {{ .ExpirationDate }}</p>
+                    <a href="{{ .DownloadLink }}" download class="download-button">
+                        Download File
+                    </a>
+                </div>
+            </section>
+        </main>
+
+    </div>
+</body>
+</html>

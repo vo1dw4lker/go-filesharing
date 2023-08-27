@@ -1,0 +1,55 @@
+/* Apply dark theme styles */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121212; /* Dark background color */
+    color: #fff; /* Light text color */
+}
+
+main {
+    background-color: #121212;
+}
+
+.container {
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+.file-details {
+    background-color: #1e1e1e; /* Darker background color for the box */
+    border-radius: 5px;
+    padding: 40px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* Darker shadow */
+    text-align: center;
+}
+
+h1 {
+    color: #ffffff;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #cccccc; /* Lighter text color */
+    margin-bottom: 15px;
+}
+
+.download-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.download-button:hover {
+    background-color: #0056b3;
+}
