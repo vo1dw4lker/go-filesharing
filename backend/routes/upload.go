@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -16,41 +15,37 @@ import (
 	"time"
 )
 
-// Allowed options for file expiration time (in days)
-var allowedExpOptions = []int{1, 7, 10}
-
-// Timeout for database operations
-const timeout = time.Second * 5
-const storageDir = "../storage"
-
 // Upload handles file uploads and creates records in the database.
 func Upload(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		expiration, err := extractExpiration(ctx)
 		if err != nil {
-			handleError(ctx, err, http.StatusBadRequest)
+			handleError(ctx, err, http.StatusBadRequest, "Invalid expiration date")
 			return
 		}
 
 		file, err := extractFile(ctx)
 		if err != nil {
-			handleError(ctx, err, http.StatusBadRequest)
+			handleError(ctx, err, http.StatusBadRequest, "File extraction failed")
 			return
 		}
 
 		fileRecord, err := createFileRecord(db, file, expiration)
 		if err != nil {
-			handleError(ctx, err, http.StatusInternalServerError)
+			handleError(ctx, err, http.StatusInternalServerError, "Failed to create file record")
 			return
 		}
 
 		err = saveUploadedFile(ctx, file, fileRecord.ID)
 		if err != nil {
-			handleError(ctx, err, http.StatusInternalServerError)
+			handleError(ctx, err, http.StatusInternalServerError, "Failed to save file")
 			return
 		}
 
-		ctx.JSON(http.StatusOK, gin.H{"link": fileRecord.ID})
+		ctx.JSON(http.StatusOK, gin.H{
+			"link":   fileRecord.ID,
+			"status": "OK",
+		})
 	}
 }
 
@@ -95,7 +90,7 @@ func createFileRecord(db *gorm.DB, file *multipart.FileHeader, exp int) (*models
 		FileSize:   file.Size,
 	}
 
-	ctxTimeout, cancel := context.WithTimeout(context.Background(), timeout)
+	ctxTimeout, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
 	if err := db.WithContext(ctxTimeout).Create(fileRecord).Error; err != nil {
@@ -118,9 +113,4 @@ func saveUploadedFile(ctx *gin.Context, file *multipart.FileHeader, fileName str
 	}
 
 	return nil
-}
-
-func handleError(ctx *gin.Context, err error, code int) {
-	log.Println("Error:", err)
-	ctx.Status(code)
 }

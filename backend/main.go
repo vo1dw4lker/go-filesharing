@@ -26,6 +26,7 @@ func main() {
 	api := server.Group("/api")
 	{
 		api.POST("/upload", routes.Upload(db))
+		api.GET("/download/:name", routes.Download())
 	}
 
 	server.GET("/file/:id", routes.View(db))

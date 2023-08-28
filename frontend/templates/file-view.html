@@ -15,7 +15,7 @@
                     <p>File Name: {{ .FileName }}</p>
                     <p>File Size: {{ .FileSize }}</p>
                     <p>Expiration Date: {{ .ExpirationDate }}</p>
-                    <a href="{{ .DownloadLink }}" download class="download-button">
+                    <a href="{{ .DownloadLink }}" download="{{ .FileName }}" class="download-button">
                         Download File
                     </a>
                 </div>

@@ -22,11 +22,20 @@ uploadButton.addEventListener('click', () => {
     })
     .then(response => response.json())
     .then(data => {
-        fileLink.value = `${baseUrl}/files/${data.link}`;
-        fileLink.style.display = 'block';
-        fileLinkLabel.style.display = 'block';
+        if (data.status === "OK") {
+            fileLink.value = `${baseUrl}/file/${data.link}`;
+            fileLink.style.display = 'block';
+            fileLinkLabel.style.display = 'block';
+        } else {
+            fileLink.value = 'Error uploading file.';
+            fileLink.style.display = 'block';
+            fileLinkLabel.style.display = 'none';
+        }
     })
     .catch(error => {
         console.error('Error uploading file:', error);
+        fileLink.value = 'Error uploading file.';
+        fileLink.style.display = 'block';
+        fileLinkLabel.style.display = 'block';
     });
 });

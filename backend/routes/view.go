@@ -16,17 +16,17 @@ func View(db *gorm.DB) gin.HandlerFunc {
 		record, err := dbGetFile(db, ctx.Param("id"))
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				handleError(ctx, err, http.StatusNotFound)
+				handleError(ctx, err, http.StatusNotFound, "File not found")
 				return
 			}
-			handleError(ctx, err, http.StatusInternalServerError)
+			handleError(ctx, err, http.StatusInternalServerError, "Failed accessing db")
 		}
 
 		ctx.HTML(http.StatusOK, "file-view.html", gin.H{
 			"FileName":       record.FileName,
-			"FileSize":       record.FileSize,
+			"FileSize":       record.FileSize, // TODO: convert to megabytes/kilobytes
 			"ExpirationDate": record.Expiration.Format(timeFormatPattern),
-			"DownloadLink":   "dl", // TODO: return a link to a file here
+			"DownloadLink":   "/api/download/" + record.ID,
 		})
 	}
 }
@@ -34,6 +34,7 @@ func View(db *gorm.DB) gin.HandlerFunc {
 func dbGetFile(db *gorm.DB, id string) (*models.File, error) {
 	record := &models.File{ID: id}
 
+	// TODO: use context
 	result := db.First(record)
 	if result.Error != nil {
 		return nil, result.Error
@@ -41,9 +42,3 @@ func dbGetFile(db *gorm.DB, id string) (*models.File, error) {
 
 	return record, nil
 }
-
-// Set the appropriate headers for downloading
-// c.Writer.Header().Set("Content-Disposition", "attachment; filename="+filenameFromDatabase)
-
-// Send the file data to the client
-// c.File(filepathToFileOnServer)
