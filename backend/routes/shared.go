@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// TODO: read constants below from config
 // Timeout for database operations
 const dbTimeout = time.Second * 5
 

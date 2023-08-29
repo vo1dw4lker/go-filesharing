@@ -7,6 +7,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
+	"time"
 )
 
 func main() {
@@ -30,6 +31,8 @@ func main() {
 	}
 
 	server.GET("/file/:id", routes.View(db))
+
+	go cleanup(db, time.Hour)
 
 	server.Run(":8081")
 }
