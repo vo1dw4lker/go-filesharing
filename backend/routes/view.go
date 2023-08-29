@@ -18,7 +18,7 @@ func View(db *gorm.DB) gin.HandlerFunc {
 		record, err := dbGetFile(db, ctx.Param("id"))
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				handleError(ctx, err, http.StatusNotFound, "File not found")
+				ctx.HTML(http.StatusNotFound, "file-not-found.html", nil)
 				return
 			}
 			handleError(ctx, err, http.StatusInternalServerError, "Failed accessing db")
