@@ -12,9 +12,9 @@
             <section class="upload-section">
                 <div class="file-details">
                     <h1>File Details</h1>
-                    <p>File Name: {{ .FileName }}</p>
-                    <p>File Size: {{ .FileSize }}</p>
-                    <p>Expiration Date: {{ .ExpirationDate }}</p>
+                    <p>Name: {{ .FileName }}</p>
+                    <p>Size: {{ .FileSize }} Mb</p>
+                    <p>Expiration: {{ .ExpirationDate }}</p>
                     <a href="{{ .DownloadLink }}" download="{{ .FileName }}" class="download-button">
                         Download File
                     </a>

@@ -1,8 +1,10 @@
 package routes
 
 import (
+	"context"
 	"errors"
 	"filesharing/models"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -24,7 +26,7 @@ func View(db *gorm.DB) gin.HandlerFunc {
 
 		ctx.HTML(http.StatusOK, "file-view.html", gin.H{
 			"FileName":       record.FileName,
-			"FileSize":       record.FileSize, // TODO: convert to megabytes/kilobytes
+			"FileSize":       byteToMegabyte(record.FileSize),
 			"ExpirationDate": record.Expiration.Format(timeFormatPattern),
 			"DownloadLink":   "/api/download/" + record.ID,
 		})
@@ -34,11 +36,20 @@ func View(db *gorm.DB) gin.HandlerFunc {
 func dbGetFile(db *gorm.DB, id string) (*models.File, error) {
 	record := &models.File{ID: id}
 
-	// TODO: use context
-	result := db.First(record)
+	ctxTimeout, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	result := db.WithContext(ctxTimeout).First(record)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
 	return record, nil
+}
+
+func byteToMegabyte(bytes int64) string {
+	megabytes := float32(bytes) / 1048576.0
+	result := fmt.Sprintf("%.2f", megabytes)
+
+	return result
 }
