@@ -19,13 +19,14 @@ func View(db *gorm.DB) gin.HandlerFunc {
 		record, err := dbGetFile(db, ctx.Param("id"))
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				ctx.HTML(http.StatusNotFound, "file-not-found.html", nil)
+				ctx.JSON(http.StatusNotFound, gin.H{"Status": "Not found"})
 				return
 			}
 			handleError(ctx, err, http.StatusInternalServerError, "Failed accessing db")
 		}
 
-		ctx.HTML(http.StatusOK, "file-view.html", gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"Status":         "OK",
 			"FileName":       record.FileName,
 			"FileSize":       byteToMegabyte(record.FileSize),
 			"ExpirationDate": record.Expiration.Format(timeFormatPattern),
@@ -50,7 +51,7 @@ func dbGetFile(db *gorm.DB, id string) (*models.File, error) {
 
 func byteToMegabyte(bytes int64) string {
 	megabytes := float32(bytes) / 1048576.0
-	result := fmt.Sprintf("%.2f", megabytes)
+	result := fmt.Sprintf("%.2f Mb", megabytes)
 
 	return result
 }

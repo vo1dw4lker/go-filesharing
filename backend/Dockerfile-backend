@@ -10,9 +10,6 @@ RUN go mod download
 COPY backend/ ./
 RUN go build -o main .
 
-COPY frontend/ /data/app/frontend
-COPY config/ /data/app/config
-
 EXPOSE 8081
 
 # Sleep for two seconds to give database time to start

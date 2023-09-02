@@ -44,8 +44,8 @@ func Upload(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		ctx.JSON(http.StatusOK, gin.H{
-			"link":   fileRecord.ID,
-			"status": "OK",
+			"Link":   fileRecord.ID,
+			"Status": "OK",
 		})
 	}
 }

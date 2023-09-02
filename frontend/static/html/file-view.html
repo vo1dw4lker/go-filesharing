@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>File Details</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/index-styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/file-view-styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <main>
+            <section class="upload-section">
+                <div class="file-details">
+                    <h1>File Details</h1>
+                    <p>Name: <span id="fileName"></span></p>
+                    <p>Size: <span id="fileSize"></span></p>
+                    <p>Expiration: <span id="expirationDate"></span></p>
+                    <a href="#" id="downloadLink" download class="download-button">
+                        Download File
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/scripts/view.js"></script>
+</body>
+</html>

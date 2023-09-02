@@ -22,8 +22,8 @@ uploadButton.addEventListener('click', () => {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.status === "OK") {
-            fileLink.value = `${baseUrl}/file/${data.link}`;
+        if (data["Status"] === "OK") {
+            fileLink.value = `${baseUrl}/file/${data["Link"]}`;
             fileLink.style.display = 'block';
             fileLinkLabel.style.display = 'block';
         } else {
