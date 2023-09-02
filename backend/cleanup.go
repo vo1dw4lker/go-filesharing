@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"filesharing/config"
 	"filesharing/models"
 	"gorm.io/gorm"
 	"log"
@@ -9,8 +10,6 @@ import (
 	"path/filepath"
 	"time"
 )
-
-const storageDir = "../storage" // TODO: read strorage dir from config
 
 func cleanup(db *gorm.DB, tick time.Duration) {
 	for range time.Tick(tick) {
@@ -23,7 +22,7 @@ func cleanup(db *gorm.DB, tick time.Duration) {
 		currentTime := time.Now()
 		for _, v := range records {
 			if currentTime.After(v.Expiration) {
-				err := deleteFile(db, storageDir, v)
+				err := deleteFile(db, config.Env.StorageDir, v)
 				if err != nil {
 					log.Println(err)
 				}
@@ -35,7 +34,7 @@ func cleanup(db *gorm.DB, tick time.Duration) {
 func dbGetAllFiles(db *gorm.DB) ([]models.File, error) {
 	var files []models.File
 
-	ctxTimeout, cancel := context.WithTimeout(context.Background(), time.Minute) // TODO: read timeout from config
+	ctxTimeout, cancel := context.WithTimeout(context.Background(), config.Env.DbTimeout)
 	defer cancel()
 
 	result := db.WithContext(ctxTimeout).Find(&files)

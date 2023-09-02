@@ -3,6 +3,7 @@ package routes
 import (
 	"context"
 	"errors"
+	"filesharing/config"
 	"filesharing/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -36,7 +37,7 @@ func View(db *gorm.DB) gin.HandlerFunc {
 func dbGetFile(db *gorm.DB, id string) (*models.File, error) {
 	record := &models.File{ID: id}
 
-	ctxTimeout, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	ctxTimeout, cancel := context.WithTimeout(context.Background(), config.Env.DbTimeout)
 	defer cancel()
 
 	result := db.WithContext(ctxTimeout).First(record)

@@ -1,8 +1,10 @@
 package main
 
 import (
+	"filesharing/config"
 	"filesharing/models"
 	"filesharing/routes"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,11 +12,18 @@ import (
 	"time"
 )
 
+var cfg = config.Env
+
 func main() {
 	server := gin.Default()
 	server.LoadHTMLGlob("../frontend/templates/*")
 
-	db, err := gorm.Open(postgres.Open("postgres://postgres:passwd@db:5432/filesharing"))
+	db, err := gorm.Open(postgres.Open(fmt.Sprintf(
+		"postgres://%s:%s@db:5432/%s",
+		cfg.PostgresUser,
+		cfg.PostgresPassword,
+		cfg.PostgresDB,
+	)))
 	if err != nil {
 		log.Fatalln(err)
 	}

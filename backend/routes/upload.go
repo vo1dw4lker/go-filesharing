@@ -3,6 +3,7 @@ package routes
 import (
 	"context"
 	"errors"
+	"filesharing/config"
 	"filesharing/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -64,7 +65,7 @@ func extractExpiration(ctx *gin.Context) (int, error) {
 }
 
 func isExpirationAllowed(exp int) bool {
-	for _, option := range allowedExpOptions {
+	for _, option := range config.Env.AllowedExpOptions {
 		if exp == option {
 			return true
 		}
@@ -90,7 +91,7 @@ func createFileRecord(db *gorm.DB, file *multipart.FileHeader, exp int) (*models
 		FileSize:   file.Size,
 	}
 
-	ctxTimeout, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	ctxTimeout, cancel := context.WithTimeout(context.Background(), config.Env.DbTimeout)
 	defer cancel()
 
 	if err := db.WithContext(ctxTimeout).Create(fileRecord).Error; err != nil {
@@ -101,11 +102,11 @@ func createFileRecord(db *gorm.DB, file *multipart.FileHeader, exp int) (*models
 }
 
 func saveUploadedFile(ctx *gin.Context, file *multipart.FileHeader, fileName string) error {
-	if err := os.MkdirAll(storageDir, os.ModePerm); err != nil {
+	if err := os.MkdirAll(config.Env.StorageDir, os.ModePerm); err != nil {
 		return err
 	}
 
-	filePath := filepath.Join(storageDir, fileName)
+	filePath := filepath.Join(config.Env.StorageDir, fileName)
 
 	err := ctx.SaveUploadedFile(file, filePath)
 	if err != nil {

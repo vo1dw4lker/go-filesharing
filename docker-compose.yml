@@ -3,10 +3,8 @@ services:
   db:
     container_name: db
     image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: passwd
-      POSTGRES_DB: filesharing
+    env_file:
+      - config/environment.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -24,6 +22,8 @@ services:
   backend:
     container_name: backend
     image: filesharing-backend:latest
+    env_file:
+      - config/environment.env
     build:
       context: .
       dockerfile: backend/Dockerfile-backend
