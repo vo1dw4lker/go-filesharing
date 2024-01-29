@@ -7,8 +7,8 @@ services:
       - config/environment.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432" # DEVELOPMENT ONLY!!! REMOVE BEFORE RELEASING
+    #ports:
+    #  - "5432:5432" # DEVELOPMENT ONLY!!! REMOVE BEFORE RELEASING
   web:
     container_name: web
     image: nginx:latest

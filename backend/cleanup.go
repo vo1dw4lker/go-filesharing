@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+// cleanup checks for stored files without matching db record (or backwards)
+// and deletes them
 func cleanup(db *gorm.DB, tick time.Duration) {
 	for range time.Tick(tick) {
 		records, err := dbGetAllFiles(db)
