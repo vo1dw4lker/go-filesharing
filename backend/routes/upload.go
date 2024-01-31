@@ -51,7 +51,7 @@ func Upload(db *gorm.DB) gin.HandlerFunc {
 }
 
 func extractExpiration(ctx *gin.Context) (int, error) {
-	expStr := ctx.PostForm("exp")
+	expStr := ctx.PostForm("Expiration")
 	exp, err := strconv.Atoi(expStr)
 	if err != nil {
 		return 0, err

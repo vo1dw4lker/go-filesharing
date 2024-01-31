@@ -4,7 +4,7 @@ services:
     container_name: db
     image: postgres:latest
     env_file:
-      - config/environment.env
+      - config/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     #ports:
@@ -14,6 +14,7 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./frontend/static:/data/static:ro
@@ -23,7 +24,7 @@ services:
     container_name: backend
     image: filesharing-backend:latest
     env_file:
-      - config/environment.env
+      - config/.env
     build:
       context: .
       dockerfile: backend/Dockerfile-backend

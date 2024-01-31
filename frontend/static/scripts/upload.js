@@ -12,8 +12,8 @@ uploadButton.addEventListener('click', () => {
 
     // Create a FormData object and append the file to it
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("exp", expOption.value);
+    formData.append("File", file);
+    formData.append("Expiration", expOption.value);
 
     // Send the form data to the server using Fetch API
     fetch("/api/upload", {
