@@ -74,7 +74,7 @@ func isExpirationAllowed(exp int) bool {
 }
 
 func extractFile(ctx *gin.Context) (*multipart.FileHeader, error) {
-	file, err := ctx.FormFile("file")
+	file, err := ctx.FormFile("File")
 	if err != nil {
 		return nil, err
 	}
